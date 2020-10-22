@@ -1,0 +1,17 @@
+Generera models
+
+Scaffold-DbContext "Server=(localdb)\mssqllocaldb;Database=ProjectFish;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models
+
+ConnectionString: "Server=(localdb)\\mssqllocaldb;Database=ProjectFish;Trusted_Connection=True;"
+
+Google API key: AIzaSyAwwGLuXzEWbcfgOtlro3hWqmUE7jkrB1A
+
+Hämta data från DB med LINQ
+
+VARIANT 1
+var account = _context.Account.SingleOrDefault(c => c.AccountId == id);
+var mail = account.Mail;
+
+VARIANT 2
+var account = _context.Account.FindAsync(id);
+var mail = account.Result.Mail;

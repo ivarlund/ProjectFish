@@ -1,0 +1,41 @@
+﻿@model IEnumerable<ProjectFish.Models.CompLure>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Composition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lure)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Composition.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lure.Brand) | @Html.DisplayFor(modelItem => item.Lure.Type)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CompLureId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CompLureId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CompLureId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,129 @@
+﻿@model ProjectFish.Models.Composition
+@{ Layout = null;}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:title" content="@Model.Name" />
+    <meta property="og:locale" content="sv-SE" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https:/localhost:XXXXX/Compositions/Details/@Model.CompositionId" />
+    <meta property="og:description" content="Overview of composition with id @Model.CompositionId" />
+    <meta property="keywords" content="Composition, Name, Reel, Rod, Lures, Fish, Places" />
+    <title>@ViewData["Title"] - ProjectFish</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header style="text-align: center">
+        <h1>@Html.DisplayFor(model => model.Name)</h1>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <div>
+                <h4>Composition</h4>
+                <hr />
+                <dl class="row">
+                    @*<dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Account)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Account.Mail)
+        </dd>*@
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Reel)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Reel.Brand)
+                    </dd>
+                    <dt class="col-sm-2">
+                        @Html.DisplayNameFor(model => model.Rod)
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Rod.Brand)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Lure
+                    </dt>
+                    <dd class="col-sm-10">
+                        @foreach (var item in Model.CompLure)
+                        {
+                            @Html.DisplayFor(model => item.Lure.Type)
+                            <br />
+                        }
+                    </dd>
+                    <dt class="col-sm-2">
+                        Fish
+                    </dt>
+                    <dd class="col-sm-10">
+                        @foreach (var item in Model.CompFish)
+                        {
+                            @Html.DisplayFor(model => item.Fish.Species)
+                            <br />
+                        }
+                    </dd>
+                    <dt class="col-sm-2">
+                        Places
+                    </dt>
+                    <dd class="col-sm-10">
+                        @{
+                            int count = 0;
+                        }
+                        @foreach (var item in Model.CompPlace)
+                        {
+                            <div class="map" id="map_@count" style="height:400px;width:700px;" data-coord="@item.Coordinates"></div>
+                            <hr />
+                            count++;
+                        }
+                    </dd>
+                </dl>
+                @*<dl class="container">
+                        @{
+                            int count = 0;
+                        }
+                        @foreach (var item in Model.CompPlace)
+                        {
+                        <div class="card">
+                            <div class="map" id="map_@count" style="height:400px;width:700px;" data-coord="@item.Coordinates"></div>
+                            <hr />
+                        </div>
+
+                            count++;
+                        }
+                    </dl>*@
+            </div>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.CompositionId">Edit</a> |
+                <a asp-action="Index">Back to List</a>
+            </div>
+        </main>
+    </div>
+    <footer class="border-top footer text-muted">
+        <script>
+            function loaded() {
+                let maps = document.querySelectorAll('.map');
+                maps.forEach(map => initMap(map));
+            }
+
+            function initMap(element) {
+                var xy = element.dataset.coord.split(',').map(a => parseFloat(a))
+                var center = new google.maps.LatLng(xy[0], xy[1])
+                var mapProp = { center: center, zoom: 12, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+                var map = new google.maps.Map(element, mapProp);
+                var marker = new google.maps.Marker({ position: center });
+                marker.setMap(map);
+            }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwwGLuXzEWbcfgOtlro3hWqmUE7jkrB1A&callback=loaded"></script>
+        <div class="container">
+            &copy; 2020 - ProjectFish - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+

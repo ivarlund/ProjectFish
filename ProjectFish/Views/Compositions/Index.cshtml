@@ -1,0 +1,90 @@
+﻿@model IEnumerable<ProjectFish.Models.Composition>
+@using Microsoft.AspNetCore.Http;
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Your Compositions</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rod)
+            </th>
+            <th>
+                Fish
+            </th>
+            <th>
+                Lure
+            </th>
+            <th>
+                Places
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Account.Mail)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Reel.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rod.Brand)
+                </td>
+                <td>
+                    @foreach (var compFish in item.CompFish)
+                    {
+                        @Html.DisplayFor(model => compFish.Fish.Species)
+                        <br />
+                    }
+                </td>
+                <td>
+                    @foreach (var compLure in item.CompLure)
+                    {
+                        @Html.DisplayFor(model => compLure.Lure.Type)
+                        <br />
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(model => item.CompPlace.Count)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CompositionId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.CompositionId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.CompositionId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (HttpContextAccessor.HttpContext.Session.GetString("added") != null)
+{
+    <script type="text/javascript">
+        alert("Added! Modify further in CompFish, CompLure, and CompFish!")
+    </script>
+
+    HttpContextAccessor.HttpContext.Session.Remove("added");
+}

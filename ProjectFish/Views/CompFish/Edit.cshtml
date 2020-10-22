@@ -1,0 +1,39 @@
+﻿@model ProjectFish.Models.CompFish
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>CompFish</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CompositionId" class="control-label"></label>
+                <select asp-for="CompositionId" class="form-control" asp-items="ViewBag.CompositionId"></select>
+                <span asp-validation-for="CompositionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FishId" class="control-label"></label>
+                <select asp-for="FishId" class="form-control" asp-items="ViewBag.FishId"></select>
+                <span asp-validation-for="FishId" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="CompFishId" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

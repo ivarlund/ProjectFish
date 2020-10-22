@@ -1,0 +1,30 @@
+﻿@model ProjectFish.Models.CompLure
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>CompLure</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Composition)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Composition.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Lure)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Lure.Brand)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.CompLureId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

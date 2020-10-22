@@ -1,0 +1,56 @@
+﻿@model IEnumerable<ProjectFish.Models.Place>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Coordinates)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 0;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div class="map" id="map_@count" style="height:400px;width:700px;" data-coord="@item.Coordinates"></div>
+                    @Html.DisplayFor(modelItem => item.Coordinates)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Coordinates">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Coordinates">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Coordinates">Delete</a>
+                </td>
+            </tr>
+            count++;
+        }
+    </tbody>
+</table>
+<script>
+    function loaded() {
+        let maps = document.querySelectorAll('.map');
+        maps.forEach(map => initMap(map));
+    }
+
+    function initMap(element) {
+        var xy = element.dataset.coord.split(',').map(a => parseFloat(a))
+        var center = new google.maps.LatLng(xy[0], xy[1])
+        var mapProp = { center: center, zoom: 12, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+        var map = new google.maps.Map(element, mapProp);
+        var marker = new google.maps.Marker({ position: center });
+        marker.setMap(map);
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwwGLuXzEWbcfgOtlro3hWqmUE7jkrB1A&callback=loaded"></script>
