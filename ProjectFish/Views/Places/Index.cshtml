@@ -25,8 +25,8 @@
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Name)
                     <div class="map" id="map_@count" style="height:400px;width:700px;" data-coord="@item.Coordinates"></div>
-                    @Html.DisplayFor(modelItem => item.Coordinates)
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Coordinates">Edit</a> |

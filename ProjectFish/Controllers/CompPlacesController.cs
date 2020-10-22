@@ -65,7 +65,7 @@ namespace ProjectFish.Controllers
             }
 
             ViewData["CompositionId"] = new SelectList(_context.Composition.Where(c => c.AccountId == accountId), "CompositionId", "Name");
-            ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Coordinates");
+            ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Name");
             return View();
         }
 

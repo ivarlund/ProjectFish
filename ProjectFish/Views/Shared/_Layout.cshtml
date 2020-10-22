@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
-<body>
+<body onload="func()">
     <header>
         @Html.Partial("_NavBar")
     </header>
@@ -30,3 +30,22 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+
+@if (HttpContextAccessor.HttpContext.Session.GetString("added") != null)
+{
+    <script type="text/javascript">
+        function func() {
+            alert("Added! Modify further in CompFish, CompLure, and CompPlace!")
+        }
+    </script>
+
+    HttpContextAccessor.HttpContext.Session.Remove("added");
+}
+else
+{
+    <script type="text/javascript">
+        function func() {
+
+        }
+    </script>
+}

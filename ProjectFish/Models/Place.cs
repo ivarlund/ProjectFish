@@ -13,6 +13,8 @@ namespace ProjectFish.Models
 
         public string Coordinates { get; set; }
 
+        public string Name { get; set; }
+
         public virtual ICollection<CompPlace> CompPlace { get; set; }
         public virtual ICollection<Habitat> Habitat { get; set; }
     }

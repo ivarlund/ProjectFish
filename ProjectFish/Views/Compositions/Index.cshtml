@@ -69,7 +69,11 @@
                     }
                 </td>
                 <td>
-                    @Html.DisplayFor(model => item.CompPlace.Count)
+                    @foreach (var compPlace in item.CompPlace)
+                    {
+                        @Html.DisplayFor(model => compPlace.Place.Name)
+                        <br />
+                    }
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.CompositionId">Edit</a> |
@@ -80,11 +84,3 @@
         }
     </tbody>
 </table>
-@if (HttpContextAccessor.HttpContext.Session.GetString("added") != null)
-{
-    <script type="text/javascript">
-        alert("Added! Modify further in CompFish, CompLure, and CompFish!")
-    </script>
-
-    HttpContextAccessor.HttpContext.Session.Remove("added");
-}

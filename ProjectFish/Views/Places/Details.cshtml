@@ -12,6 +12,10 @@
     <dl class="row">
         @Html.Partial("_GoogleMap")
     </dl>
+    <dl class="row">
+        @Html.DisplayFor(modelItem => Model.Name) :
+        @Html.DisplayFor(modelItem => Model.Coordinates)
+    </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Coordinates">Edit</a> |

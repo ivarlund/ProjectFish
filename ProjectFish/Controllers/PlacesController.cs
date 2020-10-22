@@ -53,7 +53,7 @@ namespace ProjectFish.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Coordinates")] Place place)
+        public async Task<IActionResult> Create([Bind("Coordinates, Name")] Place place)
         {
             if (ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace ProjectFish.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Coordinates")] Place place)
+        public async Task<IActionResult> Edit(string id, [Bind("Coordinates, Name")] Place place)
         {
             if (id != place.Coordinates)
             {
