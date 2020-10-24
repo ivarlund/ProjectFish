@@ -4,6 +4,7 @@ using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 
 namespace ProjectFish.Models
 {
@@ -15,13 +16,12 @@ namespace ProjectFish.Models
 
             conn.ConnectionString = "Server = (localdb)\\mssqllocaldb; Database = ProjectFish; Trusted_Connection = True;";
 
-            String sqlString = "SELECT AccountId FROM Account WHERE Mail = @mail AND Password = @password";
+            String sqlString = "SELECT AccountId, Password FROM Account WHERE Mail = @mail";
 
             SqlCommand cmd = new SqlCommand(sqlString, conn);
 
             cmd.Parameters.Add("Mail", SqlDbType.NVarChar, 100).Value = account.Mail;
-            cmd.Parameters.Add("password", SqlDbType.NVarChar, 100).Value = account.Password;
-
+            
             SqlDataAdapter adapter = new SqlDataAdapter(cmd);
             DataSet dataSet = new DataSet();
 
@@ -35,24 +35,36 @@ namespace ProjectFish.Models
                 int i = 0;
                 i = dataSet.Tables["user"].Rows.Count;
 
-                if (i == 1)
+                if (i == 1) //If a matching row is returned on the mail entered 
                 {
-                    errormsg = "";
-                    accountId = Convert.ToInt32(dataSet.Tables["user"].Rows[0]["AccountId"]);
-                    return accountId;
-                } else
+                    string hashedpw = (string)dataSet.Tables["user"].Rows[0]["Password"]; // Get the encrypted password for that mail from DB
+
+                    if (Crypto.VerifyHashedPassword(hashedpw, account.Password)) // Verify the encrypted password to the entered one
+                    {
+                        errormsg = "";
+                        accountId = Convert.ToInt32(dataSet.Tables["user"].Rows[0]["AccountId"]);
+                        return accountId; // Return AccountId if its a match.
+                    }
+                    else
+                    {
+                        errormsg = "Wrong username or password";
+                        return 0;
+                    }
+                    
+                }
+                else
                 {
-                    errormsg = "Could not find user";
-                    return accountId;
+                    errormsg = "Wrong username or password";
+                    return 0;
                 }
 
-            } 
+            }
             catch (Exception e)
             {
                 errormsg = e.Message;
-                return accountId;
+                return 0;
 
-            } 
+            }
             finally
             {
                 conn.Close();
@@ -72,7 +84,7 @@ namespace ProjectFish.Models
             SqlCommand cmd = new SqlCommand(sqlstring, conn);
 
             cmd.Parameters.Add("Mail", SqlDbType.NVarChar, 100).Value = account.Mail;
-            cmd.Parameters.Add("password", SqlDbType.NVarChar, 100).Value = account.Password;
+            cmd.Parameters.Add("password", SqlDbType.NVarChar, 100).Value = passwordEncrypter(account.Password); //account.Password; // encrypt pw
 
             try
             {
@@ -101,6 +113,13 @@ namespace ProjectFish.Models
             {
                 conn.Close();
             }
+        }
+
+        private string passwordEncrypter(string password)
+        {
+            string hashed = Crypto.HashPassword(password);
+
+            return hashed;
         }
     }
 }

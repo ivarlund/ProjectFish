@@ -19,7 +19,9 @@
             <div class="form-group">
                 <label asp-for="Coordinates" class="control-label"></label>
                 <select id="mapSelect" onchange="initMap(document.getElementById('mapSelect').value)"
-                        asp-for="Coordinates" class="form-control" asp-items="ViewBag.Coordinates"></select>
+                        asp-for="Coordinates" class="form-control" asp-items="ViewBag.Coordinates">
+                    <option selected disabled>Choose a location</option>
+                </select>
             </div>
 
             <div id="mapContainer" style="height:400px;width:700px;"></div>

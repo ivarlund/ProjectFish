@@ -86,12 +86,16 @@ namespace ProjectFish.Controllers
             else
             {
                 accountId = methods.getAccount(account, out errormsg);
+
+                var acc = _context.Account.FindAsync(accountId);
+                var name = acc.Result.Mail;
+
+
                 string session = JsonConvert.SerializeObject(accountId);
                 HttpContext.Session.SetString("user", session);
+                HttpContext.Session.SetString("username", name);
 
-                //return View();
-                return RedirectToAction("Login");
-                //return RedirectToAction("Index", "Compositions");
+                return RedirectToAction("Index", "Compositions");
             }
 
         }
