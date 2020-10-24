@@ -2,7 +2,7 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 navcolor" >
-    <div class="container" >
+    <div class="container">
         <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ProjectFish</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,7 @@
                 <li class="nav-item">
                     <a class="nav-link text-dark" asp-area="" asp-controller="Places" asp-action="Index">Places</a>
                 </li>
-                @if (HttpContextAccessor.HttpContext.Session.GetString("user") != null)
+                @*@if (HttpContextAccessor.HttpContext.Session.GetString("user") != null)
                 {
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Compositions" asp-action="Index">Compositions</a>
@@ -42,13 +42,23 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="CompPlaces" asp-action="Index">CompPlaces</a>
                     </li>
-                }
+                }*@
             </ul>
         </div>
         @if (HttpContextAccessor.HttpContext.Session.GetString("user") != null)
         {
-            <a asp-controller="Account" asp-action="Logout">Logout&nbsp;</a>
-            <a>| @HttpContextAccessor.HttpContext.Session.GetString("username")</a>
+            
+            @*<a>| @HttpContextAccessor.HttpContext.Session.GetString("username")</a>*@
+            <div class="dropdown">
+                <button class="dropbtn">@HttpContextAccessor.HttpContext.Session.GetString("username")</button>
+                <div class="dropdown-content">
+                    <a class="nav-link text-dark" asp-area="" asp-controller="Compositions" asp-action="Index">Compositions</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="CompFish" asp-action="Index">CompFish</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="CompLures" asp-action="Index">CompLures</a>
+                    <a class="nav-link text-dark" asp-area="" asp-controller="CompPlaces" asp-action="Index">CompPlaces</a>
+                    <a asp-controller="Account" asp-action="Logout" ><b>Logout</b></a>
+                </div>
+            </div>
         }
         else
         {
