@@ -80,7 +80,6 @@ namespace ProjectFish.Controllers
 
             ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand");
             ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand");
-            ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species");
 
             return View();
         }
@@ -97,7 +96,7 @@ namespace ProjectFish.Controllers
             if (session != null)
             {
                 ViewData["AccountId"] = session;
-                int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session)); // denna får inte vara null
+                int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session)); 
                 composition.AccountId = accountId;
             }
             else
@@ -113,10 +112,8 @@ namespace ProjectFish.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            //ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Mail", composition.AccountId);
             ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand", composition.ReelId);
             ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand", composition.RodId);
-            //ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species", compFish.FishId);
 
             return View(composition);
         }
@@ -134,7 +131,6 @@ namespace ProjectFish.Controllers
             {
                 return NotFound();
             }
-            ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Mail", composition.AccountId);
             ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand", composition.ReelId);
             ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand", composition.RodId);
             return View(composition);
@@ -145,11 +141,24 @@ namespace ProjectFish.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CompositionId,AccountId,RodId,ReelId,Name")] Composition composition)
+        public async Task<IActionResult> Edit(int id, [Bind("CompositionId,RodId,ReelId,Name")] Composition composition)
         {
             if (id != composition.CompositionId)
             {
                 return NotFound();
+            }
+
+            string session = HttpContext.Session.GetString("user");
+
+            if (session != null)
+            {
+                ViewData["AccountId"] = session;
+                int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session)); // denna får inte vara null
+                composition.AccountId = accountId;
+            }
+            else
+            {
+                ViewData["AccountId"] = "Log in to edit compositions";
             }
 
             if (ModelState.IsValid)
@@ -172,7 +181,7 @@ namespace ProjectFish.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Mail", composition.AccountId);
+            //ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Mail", composition.AccountId);
             ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand", composition.ReelId);
             ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand", composition.RodId);
             return View(composition);
@@ -190,6 +199,9 @@ namespace ProjectFish.Controllers
                 .Include(c => c.Account)
                 .Include(c => c.Reel)
                 .Include(c => c.Rod)
+                .Include(c => c.CompFish).ThenInclude(c => c.Fish)
+                .Include(c => c.CompLure).ThenInclude(c => c.Lure)
+                .Include(c => c.CompPlace).ThenInclude(c => c.Place)
                 .FirstOrDefaultAsync(m => m.CompositionId == id);
             if (composition == null)
             {

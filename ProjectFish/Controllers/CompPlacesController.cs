@@ -102,12 +102,19 @@ namespace ProjectFish.Controllers
                 return NotFound();
             }
 
+            string session = HttpContext.Session.GetString("user");
+            int accountId = 0;
+            if (session != null)
+            {
+                accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
+            }
+
             var compPlace = await _context.CompPlace.FindAsync(id);
             if (compPlace == null)
             {
                 return NotFound();
             }
-            ViewData["CompositionId"] = new SelectList(_context.Composition, "CompositionId", "Name", compPlace.CompositionId);
+            ViewData["CompositionId"] = new SelectList(_context.Composition.Where(c => c.AccountId == accountId), "CompositionId", "Name", compPlace.CompositionId);
             ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Coordinates", compPlace.Coordinates);
             return View(compPlace);
         }
@@ -122,6 +129,13 @@ namespace ProjectFish.Controllers
             if (id != compPlace.CompPlaceId)
             {
                 return NotFound();
+            }
+
+            string session = HttpContext.Session.GetString("user");
+            int accountId = 0;
+            if (session != null)
+            {
+                accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
             }
 
             if (ModelState.IsValid)
@@ -144,7 +158,7 @@ namespace ProjectFish.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompositionId"] = new SelectList(_context.Composition, "CompositionId", "Name", compPlace.CompositionId);
+            ViewData["CompositionId"] = new SelectList(_context.Composition.Where(c => c.AccountId == accountId), "CompositionId", "Name", compPlace.CompositionId);
             ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Coordinates", compPlace.Coordinates);
             return View(compPlace);
         }

@@ -102,12 +102,19 @@ namespace ProjectFish.Controllers
                 return NotFound();
             }
 
+            string session = HttpContext.Session.GetString("user");
+            int accountId = 0;
+            if (session != null)
+            {
+                accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
+            }
+
             var compFish = await _context.CompFish.FindAsync(id);
             if (compFish == null)
             {
                 return NotFound();
             }
-            ViewData["CompositionId"] = new SelectList(_context.Composition, "CompositionId", "Name", compFish.CompositionId);
+            ViewData["CompositionId"] = new SelectList(_context.Composition.Where(c => c.AccountId == accountId), "CompositionId", "Name", compFish.CompositionId);
             ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species", compFish.FishId);
             return View(compFish);
         }
@@ -122,6 +129,13 @@ namespace ProjectFish.Controllers
             if (id != compFish.CompFishId)
             {
                 return NotFound();
+            }
+
+            string session = HttpContext.Session.GetString("user");
+            int accountId = 0;
+            if (session != null)
+            {
+                accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
             }
 
             if (ModelState.IsValid)
@@ -144,7 +158,7 @@ namespace ProjectFish.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CompositionId"] = new SelectList(_context.Composition, "CompositionId", "Name", compFish.CompositionId);
+            ViewData["CompositionId"] = new SelectList(_context.Composition.Where(c => c.AccountId == accountId), "CompositionId", "Name", compFish.CompositionId);
             ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species", compFish.FishId);
             return View(compFish);
         }
