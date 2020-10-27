@@ -6,9 +6,9 @@
 
 <h1>Places</h1>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -28,11 +28,11 @@
                     @Html.DisplayFor(modelItem => item.Name)
                     <div class="map" id="map_@count" style="height:400px;width:700px;" data-coord="@item.Coordinates"></div>
                 </td>
-                <td>
+                @*<td>
                     <a asp-action="Edit" asp-route-id="@item.Coordinates">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Coordinates">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Coordinates">Delete</a>
-                </td>
+                </td>*@
             </tr>
             count++;
         }

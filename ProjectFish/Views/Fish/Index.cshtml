@@ -6,9 +6,9 @@
 
 <h1>Fish Species</h1>
 
-<p>
+@*<p>
     <a asp-action="Create">Create New</a>
-</p>
+</p>*@
 <table class="table">
     <thead>
         <tr>
@@ -34,13 +34,13 @@
                 @Html.DisplayFor(modelItem => item.Waters)
             </td>
             <td>
-                <a href="@Html.DisplayFor(modelItem => item.WikiLink)">WikiLink</a>
+                <iframe src="@item.WikiLink" title="@item.Species" width="100%" height="100%"></iframe>
             </td>
-            <td>
+            @*<td>
                 <a asp-action="Edit" asp-route-id="@item.FishId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.FishId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.FishId">Delete</a>
-            </td>
+            </td>*@
         </tr>
 }
     </tbody>

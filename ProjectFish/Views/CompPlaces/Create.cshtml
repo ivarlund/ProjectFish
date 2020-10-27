@@ -14,13 +14,15 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CompositionId" class="control-label"></label>
-                <select asp-for="CompositionId" class="form-control" asp-items="ViewBag.CompositionId"></select>
+                <select asp-for="CompositionId" class="form-control" asp-items="ViewBag.CompositionId">
+                    <option selected disabled>Select a composition</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="Coordinates" class="control-label"></label>
                 <select id="mapSelect" onchange="initMap(document.getElementById('mapSelect').value)"
                         asp-for="Coordinates" class="form-control" asp-items="ViewBag.Coordinates">
-                    <option selected disabled>Choose a location</option>
+                    <option selected disabled>Select a location</option>
                 </select>
             </div>
 
