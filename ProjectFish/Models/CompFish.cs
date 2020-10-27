@@ -7,7 +7,6 @@ namespace ProjectFish.Models
 {
     public partial class CompFish
     {
-
         [Required]
         [DisplayName("Composition")]
         public int CompositionId { get; set; }

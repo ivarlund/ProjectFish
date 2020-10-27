@@ -1,0 +1,56 @@
+﻿@model ProjectFish.Models.VMCompFishPlaceLure
+<h4>Composition</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditAll">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Composition.CompositionId" />
+            <div class="form-group">
+                <label asp-for="Composition.Name" class="control-label"></label>
+                <input asp-for="Composition.Name" class="form-control" />
+                <span asp-validation-for="Composition.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Composition.RodId" class="control-label"></label>
+                <select asp-for="Composition.RodId" class="form-control" asp-items="ViewBag.RodId"></select>
+                <span asp-validation-for="Composition.RodId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Composition.ReelId" class="control-label"></label>
+                <select asp-for="Composition.ReelId" class="form-control" asp-items="ViewBag.ReelId"></select>
+                <span asp-validation-for="Composition.ReelId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Fishes" class="control-label"></label>
+                <select asp-for="Fishes" class="form-control" asp-items="ViewBag.FishId" multiple>
+                    <option selected disabled>Select fishes</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Lures" class="control-label"></label>
+                <select asp-for="Lures" class="form-control" asp-items="ViewBag.LureId" multiple>
+                    <option selected disabled>Select lures</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Places" class="control-label"></label>
+                <select asp-for="Places" class="form-control" asp-items="ViewBag.Coordinates" multiple>
+                    <option selected disabled>Select places</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

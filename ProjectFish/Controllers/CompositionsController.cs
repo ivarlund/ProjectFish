@@ -60,11 +60,11 @@ namespace ProjectFish.Controllers
             return View(composition);
         }
 
-        // GET: Compositions/Create
-        public IActionResult Create()
+        public IActionResult CreateAll()
         {
+
             string session = HttpContext.Session.GetString("user");
-            
+
             if (session != null)
             {
                 int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
@@ -72,7 +72,262 @@ namespace ProjectFish.Controllers
                 var account = _context.Account.FindAsync(accountId);
                 var name = account != null ? account.Result.Mail : "not logged IN!!!"; // Hämta värdet från en specifik kolumn
                 ViewData["AccountId"] = name;
-            } 
+            }
+            else
+            {
+                ViewData["AccountId"] = "Not logged in";
+            }
+
+            ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand");
+            ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand");
+            ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species");
+            ViewData["LureId"] = new SelectList(_context.Lure, "LureId", "Brand");
+            ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Name");
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateAll(VMCompFishPlaceLure viewModel)
+        {
+
+            string session = HttpContext.Session.GetString("user");
+
+            if (session != null)
+            {
+                int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
+                var account = _context.Account.FindAsync(accountId);
+                var name = account != null ? account.Result.Mail : "not logged IN!!!"; // Hämta värdet från en specifik kolumn
+
+                viewModel.Composition.AccountId = accountId;
+                ViewData["AccountId"] = name;
+            }
+            else
+            {
+                ViewData["AccountId"] = "Not logged in";
+                return View();
+            }
+
+
+
+            if (viewModel != null)
+            {
+                _context.Add(viewModel.Composition);
+                _context.SaveChanges();
+
+                if (viewModel.Fishes != null)
+                {
+                    foreach (var fish in viewModel.Fishes)
+                    {
+                        CompFish cf = new CompFish
+                        {
+                            Composition = viewModel.Composition,
+                            FishId = fish
+                        };
+
+                        _context.Add(cf);
+                    }
+                }
+
+                if (viewModel.Lures != null)
+                {
+                    foreach (var lure in viewModel.Lures)
+                    {
+                        CompLure cl = new CompLure
+                        {
+                            Composition = viewModel.Composition,
+                            LureId = lure
+                        };
+
+                        _context.Add(cl);
+                    }
+                }
+
+                if (viewModel.Places != null)
+                {
+                    foreach (var place in viewModel.Places)
+                    {
+                        CompPlace cp = new CompPlace
+                        {
+                            Composition = viewModel.Composition,
+                            Coordinates = place
+                        };
+
+                        _context.Add(cp);
+                    }
+                }
+
+                _context.SaveChanges();
+                HttpContext.Session.SetString("added", "true");
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand");
+            ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand");
+            ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species");
+            ViewData["LureId"] = new SelectList(_context.Lure, "LureId", "Brand");
+            ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Name");
+
+            return View();
+        }
+
+        public async Task<IActionResult> EditAll(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            VMCompFishPlaceLure viewModel = new VMCompFishPlaceLure();
+
+            var composition = await _context.Composition.FindAsync(id);
+            if (composition == null)
+            {
+                return NotFound();
+            }
+
+            viewModel.Composition = composition;
+
+            ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand", composition.ReelId);
+            ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand", composition.RodId);
+            ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species");
+            ViewData["LureId"] = new SelectList(_context.Lure, "LureId", "Brand");
+            ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Name");
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAll(int id, VMCompFishPlaceLure viewModel)
+        {
+            if (id != viewModel.Composition.CompositionId)
+            {
+                return NotFound();
+            }
+
+            string session = HttpContext.Session.GetString("user");
+
+            if (session != null)
+            {
+                ViewData["AccountId"] = session;
+                int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session)); // denna får inte vara null
+                viewModel.Composition.AccountId = accountId;
+            }
+            else
+            {
+                ViewData["AccountId"] = "Log in to edit compositions";
+            }
+
+            if (viewModel != null)
+            {
+                try
+                {
+                    _context.Update(viewModel.Composition);
+                    await _context.SaveChangesAsync();
+
+                    if (viewModel.Fishes != null)
+                    {
+                        var compFishes = from matches in _context.CompFish
+                                         where matches.CompositionId == id
+                                         select matches;
+
+
+                        _context.CompFish.RemoveRange(compFishes);
+                        
+                        foreach (var fish in viewModel.Fishes)
+                        {
+                            CompFish cf = new CompFish
+                            {
+                                Composition = viewModel.Composition,
+                                FishId = fish
+                            };
+
+                            _context.Add(cf);
+
+                        }
+                    }
+
+                    if (viewModel.Lures != null)
+                    {
+
+                        var compLures = from matches in _context.CompLure
+                                        where matches.CompositionId == id
+                                        select matches;
+
+                        _context.CompLure.RemoveRange(compLures);
+
+                        foreach (var lure in viewModel.Lures)
+                        {
+                            CompLure cl = new CompLure
+                            {
+                                Composition = viewModel.Composition,
+                                LureId = lure
+                            };
+
+                            _context.Add(cl);
+                        }
+                    }
+
+                    if (viewModel.Places != null)
+                    {
+                        var compPlaces = from matches in _context.CompPlace
+                                         where matches.CompositionId == id
+                                         select matches;
+
+                        _context.CompPlace.RemoveRange(compPlaces);
+
+                        foreach (var place in viewModel.Places)
+                        {
+                            CompPlace cp = new CompPlace
+                            {
+                                Composition = viewModel.Composition,
+                                Coordinates = place
+                            };
+
+                            _context.Add(cp);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CompositionExists(viewModel.Composition.CompositionId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            //ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Mail", composition.AccountId);
+            ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand", viewModel.Composition.ReelId);
+            ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand", viewModel.Composition.RodId);
+            ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species");
+            ViewData["LureId"] = new SelectList(_context.Lure, "LureId", "Brand");
+            ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Name");
+            return View(viewModel.Composition);
+        }
+
+        // GET: Compositions/Create
+        public IActionResult Create()
+        {
+            string session = HttpContext.Session.GetString("user");
+
+            if (session != null)
+            {
+                int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
+                //var account = _context.Account.SingleOrDefault(c => c.AccountId == accountId); // Hämta en specifik rad från en tabell
+                var account = _context.Account.FindAsync(accountId);
+                var name = account != null ? account.Result.Mail : "not logged IN!!!"; // Hämta värdet från en specifik kolumn
+                ViewData["AccountId"] = name;
+            }
             else
             {
                 ViewData["AccountId"] = "Not logged in";
@@ -96,7 +351,7 @@ namespace ProjectFish.Controllers
             if (session != null)
             {
                 ViewData["AccountId"] = session;
-                int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session)); 
+                int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
                 composition.AccountId = accountId;
             }
             else
@@ -109,6 +364,8 @@ namespace ProjectFish.Controllers
                 _context.Add(composition);
                 await _context.SaveChangesAsync();
                 HttpContext.Session.SetString("added", "true");
+                //return RedirectToAction("Create", "CompFish");
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -116,6 +373,7 @@ namespace ProjectFish.Controllers
             ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand", composition.RodId);
 
             return View(composition);
+            //return RedirectToAction("Create", "CompFish");
         }
 
         // GET: Compositions/Edit/5
