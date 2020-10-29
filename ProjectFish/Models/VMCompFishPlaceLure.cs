@@ -7,7 +7,6 @@ namespace ProjectFish.Models
 {
     public class VMCompFishPlaceLure
     {
-
         public Composition Composition { get; set; }
 
         public IEnumerable<int> Fishes { get; set; }

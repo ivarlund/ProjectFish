@@ -10,9 +10,10 @@
     <meta property="og:locale" content="sv-SE" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https:/localhost:XXXXX/Compositions/Details/@Model.CompositionId" />
-    <meta property="og:description" content="Overview of composition with id @Model.CompositionId" />
+    <meta property="og:description" content="Overview of composition with id @Model.CompositionId and
+          relational CompFish, CompLure and CompPlace entities with same CompositionId" />
     <meta property="keywords" content="Composition, Name, Reel, Rod, Lures, Fish, Places" />
-    <title>@ViewData["Title"] - ProjectFish</title>
+    <title>@Model.Name</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
@@ -21,7 +22,7 @@
         <h1>@Html.DisplayFor(model => model.Name)</h1>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main class="pb-3">
             <div>
                 <h4>Composition</h4>
                 <hr />

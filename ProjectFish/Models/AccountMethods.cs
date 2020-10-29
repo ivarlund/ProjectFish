@@ -50,26 +50,22 @@ namespace ProjectFish.Models
                         errormsg = "Wrong username or password";
                         return 0;
                     }
-                    
                 }
                 else
                 {
                     errormsg = "Wrong username or password";
                     return 0;
                 }
-
             }
             catch (Exception e)
             {
                 errormsg = e.Message;
                 return 0;
-
             }
             finally
             {
                 conn.Close();
             }
-
         }
 
         public int CreateAccount(Account account, out string errormsg)

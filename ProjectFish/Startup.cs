@@ -29,21 +29,12 @@ namespace ProjectFish
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();
 
-            //CookieConfig? Från filmen
-            //services.Configure<CookiePolicyOptions>(options =>
-            //{
-
-            //    options.CheckConsentNeeded = context => true;
-            //    options.MinimumSameSitePolicy = SameSiteMode.None;
-            //}
-            //);
-
             // SessionVariable
             services.AddDistributedMemoryCache();
 
             services.AddSession(options =>
             {
-                options.IdleTimeout = TimeSpan.FromSeconds(50);
+                options.IdleTimeout = TimeSpan.FromSeconds(120);
                 options.Cookie.HttpOnly = true;
             });
 

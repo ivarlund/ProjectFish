@@ -17,16 +17,16 @@ var account = _context.Account.FindAsync(id);
 var mail = account.Result.Mail;
 
 ==================== To-Do ====================
+
+# Implement AJAX in the GUI
+
+==================== DONE ====================
+# Add encryption/hashing to passwords
 # Fix logged in items to seperate menus
 # Set title names
 # Set navigations/controls for system end product
 # Add form instructions conforming to WAI/WCAG
 	## Check many-to-many handler methods for input forms
 # Analyze generated HTML code according to W3C:s recommendations
-
-# Implement AJAX in the GUI
 # Remove 'Home' Link-item but keep title link
 # Fix Home page with pics and information about the site.
-
-==================== DONE ====================
-# Add encryption/hashing to passwords

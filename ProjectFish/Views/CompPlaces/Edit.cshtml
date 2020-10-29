@@ -14,18 +14,18 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="CompositionId" class="control-label"></label>
-                <select asp-for="CompositionId" class="form-control" asp-items="ViewBag.CompositionId">
-                    <option selected disabled>Select a composition</option>
-                </select>
+                <select asp-for="CompositionId" class="form-control" asp-items="ViewBag.CompositionId"></select>
                 <span asp-validation-for="CompositionId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Coordinates" class="control-label"></label>
-                <select asp-for="Coordinates" class="form-control" asp-items="ViewBag.Coordinates">
-                    <option selected disabled>Select a location</option>
+                <label for="mapSelect" class="control-label">Place</label>
+                <select id="mapSelect" onchange="initMap(document.getElementById('mapSelect').value)"
+                        class="form-control" asp-items="ViewBag.Coordinates">
                 </select>
-                <span asp-validation-for="Coordinates" class="text-danger"></span>
             </div>
+            <div id="mapContainer" style="height:400px;width:700px;"></div>
+            <br />
+
             <input type="hidden" asp-for="CompPlaceId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -37,6 +37,18 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script>
+    function initMap(coordinates) {
+        var xy = coordinates.split(',').map(a => parseFloat(a))
+        var center = new google.maps.LatLng(xy[0], xy[1])
+        var mapProp = { center: center, zoom: 12, scrollwheel: false, draggable: true, mapTypeId: google.maps.MapTypeId.ROADMAP };
+        var map = new google.maps.Map(document.getElementById("mapContainer"), mapProp);
+        var marker = new google.maps.Marker({ position: center });
+        marker.setMap(map);
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwwGLuXzEWbcfgOtlro3hWqmUE7jkrB1A&amp;callback=initMap"></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

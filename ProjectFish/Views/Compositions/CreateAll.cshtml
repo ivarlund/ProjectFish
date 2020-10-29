@@ -7,42 +7,39 @@
         <form asp-action="CreateAll">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Composition.Name" class="control-label"></label>
-                <input asp-for="Composition.Name" class="form-control" placeholder="Enter a name"/>
+                <label asp-for="Composition.Name" class="control-label">Select a name</label>
+                <input asp-for="Composition.Name" class="form-control" placeholder="Enter a name" />
                 <span asp-validation-for="Composition.Name" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <label asp-for="Composition.RodId" class="control-label"></label>
+                <label asp-for="Composition.RodId" class="control-label">Select your rod</label>
                 <select asp-for="Composition.RodId" class="form-control" asp-items="ViewBag.RodId">
-                    <option selected disabled>Select a rod</option>
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="Composition.ReelId" class="control-label"></label>
+                <label asp-for="Composition.ReelId" class="control-label">Select your reel</label>
                 <select asp-for="Composition.ReelId" class="form-control" asp-items="ViewBag.ReelId">
-                    <option selected disabled>Select a reel</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label asp-for="Fishes" class="control-label"></label>
+                <label asp-for="Fishes" class="control-label">Select your intended fish</label>
                 <select asp-for="Fishes" class="form-control" asp-items="ViewBag.FishId" multiple>
-                    <option selected disabled>Select fishes</option>
+                    <option selected disabled>Ctrl + left mouse to select/deselect</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label asp-for="Lures" class="control-label"></label>
+                <label asp-for="Lures" class="control-label">Select your lures</label>
                 <select asp-for="Lures" class="form-control" asp-items="ViewBag.LureId" multiple>
-                    <option selected disabled>Select lures</option>
+                    <option selected disabled>Ctrl + left mouse to select/deselect</option>
                 </select>
             </div>
 
             <div class="form-group">
-                <label asp-for="Places" class="control-label"></label>
+                <label asp-for="Places" class="control-label">Select your intended places</label>
                 <select asp-for="Places" class="form-control" asp-items="ViewBag.Coordinates" multiple>
-                    <option selected disabled>Select places</option>
+                    <option selected disabled>Ctrl + left mouse to select/deselect</option>
                 </select>
             </div>
 

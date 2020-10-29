@@ -30,10 +30,11 @@ namespace ProjectFish.Controllers
                 accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
             }
 
-            var projectFishContext = _context.Composition.Include(c => c.Account).Where(c => c.AccountId == accountId).Include(c => c.Reel).Include(c => c.Rod).
+            var compositions = _context.Composition.Include(c => c.Account).Where(c => c.AccountId == accountId).
+                Include(c => c.Reel).Include(c => c.Rod).
                 Include(c => c.CompFish).ThenInclude(c => c.Fish).Include(c => c.CompLure).ThenInclude(c => c.Lure).
-                Include(c => c.CompPlace).ThenInclude(c => c.Place); // Sista THENINCLUDE var det som funkade för att få åtkomst till elementen!
-            return View(await projectFishContext.ToListAsync());
+                Include(c => c.CompPlace).ThenInclude(c => c.Place);
+            return View(await compositions.ToListAsync());
         }
 
         // GET: Compositions/Details/5
@@ -68,14 +69,14 @@ namespace ProjectFish.Controllers
             if (session != null)
             {
                 int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
-                //var account = _context.Account.SingleOrDefault(c => c.AccountId == accountId); // Hämta en specifik rad från en tabell
                 var account = _context.Account.FindAsync(accountId);
-                var name = account != null ? account.Result.Mail : "not logged IN!!!"; // Hämta värdet från en specifik kolumn
+                var name = account != null ? account.Result.Mail : "not logged IN!!!";
                 ViewData["AccountId"] = name;
             }
             else
             {
                 ViewData["AccountId"] = "Not logged in";
+                return RedirectToAction("index", "Home");
             }
 
             ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand");
@@ -88,6 +89,7 @@ namespace ProjectFish.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult CreateAll(VMCompFishPlaceLure viewModel)
         {
 
@@ -97,7 +99,7 @@ namespace ProjectFish.Controllers
             {
                 int accountId = Convert.ToInt32(JsonConvert.DeserializeObject(session));
                 var account = _context.Account.FindAsync(accountId);
-                var name = account != null ? account.Result.Mail : "not logged IN!!!"; // Hämta värdet från en specifik kolumn
+                var name = account != null ? account.Result.Mail : "not logged IN!!!";
 
                 viewModel.Composition.AccountId = accountId;
                 ViewData["AccountId"] = name;
@@ -105,12 +107,12 @@ namespace ProjectFish.Controllers
             else
             {
                 ViewData["AccountId"] = "Not logged in";
-                return View();
+                return RedirectToAction("index", "Home");
             }
 
 
-
-            if (viewModel != null)
+            
+            if (ModelState.IsValid)
             {
                 _context.Add(viewModel.Composition);
                 _context.SaveChanges();
@@ -220,7 +222,7 @@ namespace ProjectFish.Controllers
                 ViewData["AccountId"] = "Log in to edit compositions";
             }
 
-            if (viewModel != null)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -306,7 +308,7 @@ namespace ProjectFish.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            //ViewData["AccountId"] = new SelectList(_context.Account, "AccountId", "Mail", composition.AccountId);
+
             ViewData["ReelId"] = new SelectList(_context.Reel, "ReelId", "Brand", viewModel.Composition.ReelId);
             ViewData["RodId"] = new SelectList(_context.Rod, "RodId", "Brand", viewModel.Composition.RodId);
             ViewData["FishId"] = new SelectList(_context.Fish, "FishId", "Species");

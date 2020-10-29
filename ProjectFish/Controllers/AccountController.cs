@@ -59,7 +59,6 @@ namespace ProjectFish.Controllers
                 string session = JsonConvert.SerializeObject(accountId);
                 HttpContext.Session.SetString("user", session);
                 HttpContext.Session.SetString("username", name);
-                //return View();
                 return RedirectToAction("Index", "Compositions");
             }
         }

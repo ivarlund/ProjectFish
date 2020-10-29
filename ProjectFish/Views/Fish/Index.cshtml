@@ -21,7 +21,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.WikiLink)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -34,7 +33,7 @@
                 @Html.DisplayFor(modelItem => item.Waters)
             </td>
             <td>
-                <iframe src="@item.WikiLink" title="@item.Species" width="100%" height="100%"></iframe>
+                <iframe src="@item.WikiLink" title="@item.Species" style="height:100%;width:100%;"></iframe>
             </td>
             @*<td>
                 <a asp-action="Edit" asp-route-id="@item.FishId">Edit</a> |

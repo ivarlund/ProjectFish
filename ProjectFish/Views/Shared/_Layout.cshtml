@@ -15,7 +15,7 @@
         @Html.Partial("_NavBar")
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main class="pb-3">
             @RenderBody()
         </main>
     </div>
@@ -27,25 +27,25 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @if (HttpContextAccessor.HttpContext.Session.GetString("added") != null)
+    {
+        <script>
+            function func() {
+                alert("Added composition!")
+            }
+        </script>
+
+        HttpContextAccessor.HttpContext.Session.Remove("added");
+    }
+    else
+    {
+        <script>
+            function func() {
+
+            }
+        </script>
+    }
     @RenderSection("Scripts", required: false)
 </body>
 </html>
 
-@if (HttpContextAccessor.HttpContext.Session.GetString("added") != null)
-{
-    <script type="text/javascript">
-        function func() {
-            alert("Added! Modify further in CompFish, CompLure, and CompPlace!")
-        }
-    </script>
-
-    HttpContextAccessor.HttpContext.Session.Remove("added");
-}
-else
-{
-    <script type="text/javascript">
-        function func() {
-
-        }
-    </script>
-}

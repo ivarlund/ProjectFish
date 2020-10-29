@@ -19,9 +19,9 @@
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="Coordinates" class="control-label"></label>
+                <label for="mapSelect" class="control-label">Place</label>
                 <select id="mapSelect" onchange="initMap(document.getElementById('mapSelect').value)"
-                        asp-for="Coordinates" class="form-control" asp-items="ViewBag.Coordinates">
+                        class="form-control" asp-items="ViewBag.Coordinates">
                     <option selected disabled>Select a location</option>
                 </select>
             </div>
@@ -50,7 +50,7 @@
         marker.setMap(map);
     }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwwGLuXzEWbcfgOtlro3hWqmUE7jkrB1A&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAwwGLuXzEWbcfgOtlro3hWqmUE7jkrB1A&amp;callback=initMap"></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
