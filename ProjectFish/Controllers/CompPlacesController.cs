@@ -90,7 +90,7 @@ namespace ProjectFish.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CompositionId"] = new SelectList(_context.Composition.Where(c => c.AccountId == accountId), "CompositionId", "Name", compPlace.CompositionId);
-            ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Coordinates", compPlace.Coordinates);
+            ViewData["Coordinates"] = new SelectList(_context.Place, "Coordinates", "Name", compPlace.Coordinates);
             return View(compPlace);
         }
 
